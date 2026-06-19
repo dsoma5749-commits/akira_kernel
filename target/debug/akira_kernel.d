@@ -1,0 +1,1 @@
+/data/data/com.termux/files/home/akira_kernel/target/debug/akira_kernel: /data/data/com.termux/files/home/akira_kernel/src/libs/kernel_core.rs /data/data/com.termux/files/home/akira_kernel/src/main.rs
