@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 // আকিরা কার্নেলের AI-Driven প্রসেস শিডিউলার
 
 #[derive(Debug, Clone)]
@@ -76,4 +77,4 @@ impl AiScheduler {
         Some(process)
     }
 }
-#![allow(dead_code)]
+
