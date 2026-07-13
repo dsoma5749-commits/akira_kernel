@@ -6,7 +6,7 @@ use std::fs;
 #[derive(Debug, Clone, PartialEq)]
 pub enum ThreatLevel {
     Safe,
-    Suspicious,
+     Suspicious,
     Critical,
 }
 
