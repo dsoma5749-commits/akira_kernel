@@ -1,3 +1,4 @@
+```
 #![allow(dead_code)]
 use serde::{Deserialize};
 use std::fs;
@@ -88,3 +89,4 @@ impl AiSecurityMonitor {
         println!("\n✅ Scan Complete.");
     }
 }
+```
