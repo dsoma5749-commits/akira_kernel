@@ -2,11 +2,10 @@
 use serde::{Deserialize};
 use std::fs;
 
-// --- সব স্ট্রাক্ট এবং এনাম সবার উপরে ---
 #[derive(Debug, Clone, PartialEq)]
 pub enum ThreatLevel {
     Safe,
-     Suspicious,
+    Suspicious,
     Critical,
 }
 
@@ -32,7 +31,6 @@ pub struct AiSecurityMonitor {
     pub syscall_limit: u32,
 }
 
-// --- সব ফাংশন এই ব্লকের ভেতরে থাকবে ---
 impl AiSecurityMonitor {
     pub fn new() -> Self {
         AiSecurityMonitor {
@@ -47,7 +45,6 @@ impl AiSecurityMonitor {
             if let Ok(signatures) = serde_json::from_str::<Vec<Signature>>(&data) {
                 for sig in signatures {
                     if sig.name == process_name {
-                        println!("🚨 DATABASE MATCH: {} is a known threat!", process_name);
                         return true;
                     }
                 }
@@ -73,6 +70,7 @@ impl AiSecurityMonitor {
 
     pub fn analyze(&self, process: &ProcessActivity) {
         if self.check_database(&process.name) {
+            println!("🚨 DATABASE MATCH: {} is a known threat!", process.name);
             self.kill_process(process);
             return;
         }
