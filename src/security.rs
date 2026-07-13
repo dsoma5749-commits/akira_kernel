@@ -2,12 +2,9 @@
 use serde::{Deserialize};
 use std::fs;
 
+// --- সব স্ট্রাক্ট এবং এনাম ---
 #[derive(Debug, Clone, PartialEq)]
-pub enum ThreatLevel {
-    Safe,
-    Suspicious,
-    Critical,
-}
+pub enum ThreatLevel { Safe, Suspicious, Critical }
 
 #[derive(Debug, Clone)]
 pub struct ProcessActivity {
@@ -31,22 +28,17 @@ pub struct AiSecurityMonitor {
     pub syscall_limit: u32,
 }
 
+// --- একমাত্র এবং একটিই impl ব্লক ---
 impl AiSecurityMonitor {
     pub fn new() -> Self {
-        AiSecurityMonitor {
-            cpu_limit: 80.0,
-            memory_limit: 70.0,
-            syscall_limit: 1000,
-        }
+        AiSecurityMonitor { cpu_limit: 80.0, memory_limit: 70.0, syscall_limit: 1000 }
     }
 
     pub fn check_database(&self, process_name: &str) -> bool {
         if let Ok(data) = fs::read_to_string("signatures.json") {
             if let Ok(signatures) = serde_json::from_str::<Vec<Signature>>(&data) {
                 for sig in signatures {
-                    if sig.name == process_name {
-                        return true;
-                    }
+                    if sig.name == process_name { return true; }
                 }
             }
         }
@@ -74,10 +66,8 @@ impl AiSecurityMonitor {
             self.kill_process(process);
             return;
         }
-
         let score = self.threat_score(process);
         let level = self.classify(score);
-
         match level {
             ThreatLevel::Safe => println!("✅ SAFE     | {} | Score: {:.1}", process.name, score),
             ThreatLevel::Suspicious => println!("⚠️  FLAGGED  | {} | Score: {:.1} | Monitoring...", process.name, score),
@@ -94,9 +84,7 @@ impl AiSecurityMonitor {
 
     pub fn scan_all(&self, processes: &Vec<ProcessActivity>) {
         println!("\n🔍 Akira AI Security Scan Started...\n");
-        for p in processes {
-            self.analyze(p);
-        }
+        for p in processes { self.analyze(p); }
         println!("\n✅ Scan Complete.");
     }
 }
