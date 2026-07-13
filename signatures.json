@@ -1,0 +1,10 @@
+[
+  {
+    "name": "malware_miner_v1",
+    "threat_level": "Critical"
+  },
+  {
+    "name": "spyware_agent",
+    "threat_level": "Critical"
+  }
+]
