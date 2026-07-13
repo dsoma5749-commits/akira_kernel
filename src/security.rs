@@ -24,6 +24,17 @@ pub struct AiSecurityMonitor {
     pub memory_limit: f32,
     pub syscall_limit: u32,
 }
+pub fn analyze(&self, process: &ProcessActivity) {
+    // প্রথমে ডাটাবেস চেক করো
+    if self.check_database(&process.name) {
+        self.kill_process(process);
+        return;
+    }
+
+    // ডাটাবেসে না থাকলে আগের AI লজিক দিয়ে চেক করো
+    let score = self.threat_score(process);
+    // ... বাকি কোড (আগের মতোই থাকবে)
+}
 
 impl AiSecurityMonitor {
     pub fn new() -> Self {
