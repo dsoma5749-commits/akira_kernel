@@ -115,3 +115,27 @@ impl AiSecurityMonitor {
         println!("\n✅ Scan Complete.");
     }
 }
+use serde::{Deserialize};
+use std::fs;
+
+#[derive(Deserialize, Debug)]
+pub struct Signature {
+    pub name: String,
+    pub threat_level: String,
+}
+
+impl AiSecurityMonitor {
+    // ডাটাবেস থেকে চেক করা
+    pub fn check_database(&self, process_name: &str) -> bool {
+        let data = fs::read_to_string("signatures.json").expect("Unable to read file");
+        let signatures: Vec<Signature> = serde_json::from_str(&data).expect("JSON parsing error");
+
+        for sig in signatures {
+            if sig.name == process_name {
+                println!("🚨 DATABASE MATCH: {} is a known threat!", process_name);
+                return true;
+            }
+        }
+        false
+    }
+}
