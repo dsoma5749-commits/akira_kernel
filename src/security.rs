@@ -2,6 +2,7 @@
 use serde::{Deserialize};
 use std::fs;
 
+// --- সব স্ট্রাক্ট এবং এনাম সবার উপরে ---
 #[derive(Debug, Clone, PartialEq)]
 pub enum ThreatLevel {
     Safe,
@@ -31,6 +32,7 @@ pub struct AiSecurityMonitor {
     pub syscall_limit: u32,
 }
 
+// --- সব ফাংশন এই ব্লকের ভেতরে থাকবে ---
 impl AiSecurityMonitor {
     pub fn new() -> Self {
         AiSecurityMonitor {
@@ -40,9 +42,7 @@ impl AiSecurityMonitor {
         }
     }
 
-    // ডাটাবেস চেক করার ফাংশন
     pub fn check_database(&self, process_name: &str) -> bool {
-        // ফাইলটি পড়ার চেষ্টা করছি, যদি না থাকে তবে false রিটার্ন করবে
         if let Ok(data) = fs::read_to_string("signatures.json") {
             if let Ok(signatures) = serde_json::from_str::<Vec<Signature>>(&data) {
                 for sig in signatures {
@@ -56,7 +56,6 @@ impl AiSecurityMonitor {
         false
     }
 
-    // AI threat score calculate করে
     fn threat_score(&self, p: &ProcessActivity) -> f32 {
         let mut score = 0.0;
         if p.cpu_usage > self.cpu_limit { score += (p.cpu_usage - self.cpu_limit) * 1.5; }
@@ -72,15 +71,12 @@ impl AiSecurityMonitor {
         else { ThreatLevel::Critical }
     }
 
-    // প্রধান analyze ফাংশন (যা এখন ঠিক জায়গায় আছে)
     pub fn analyze(&self, process: &ProcessActivity) {
-        // ১. আগে ডাটাবেস চেক
         if self.check_database(&process.name) {
             self.kill_process(process);
             return;
         }
 
-        // ২. ডাটাবেসে না থাকলে AI লজিক
         let score = self.threat_score(process);
         let level = self.classify(score);
 
